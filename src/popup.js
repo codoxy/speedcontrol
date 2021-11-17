@@ -1,26 +1,23 @@
-// Initialize butotn with users's prefered color
-let changeColor = document.getElementById("changeColor");
+Array.from(document.getElementsByTagName("button")).forEach((btn)=>{
+  let rate = parseFloat(btn.getAttribute("data-playbackrate"));
+  btn.addEventListener("click", async () => {
+    let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    chrome.webNavigation.getAllFrames({tabId:tab.id},(frames) => {
+      frames.forEach((frame) => {
+        chrome.scripting.executeScript({
+          target: { tabId: tab.id, frameIds: [frame.frameId] },
+          function: (rate) => {
+            Array.from(document.getElementsByTagName("audio")).forEach((e)=>{
+              e.playbackRate=rate;
+            });
+            Array.from(document.getElementsByTagName("video")).forEach((e)=>{
+              e.playbackRate=rate;
+            });
 
-chrome.storage.sync.get("color", ({ color }) => {
-  changeColor.style.backgroundColor = color;
-});
-
-// When the button is clicked, inject setPageBackgroundColor into current page
-changeColor.addEventListener("click", async () => {
-  let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    function: setPageBackgroundColor,
+          },
+          args: [rate],
+        });
+      });
+    });
   });
 });
-
-// The body of this function will be execuetd as a content script inside the
-// current page
-function setPageBackgroundColor() {
-  chrome.storage.sync.get("color", ({ color }) => {
-    document.body.style.backgroundColor = color;
-  });
-  Array.from(document.getElementsByTagName("audio")).forEach((e)=>{e.playbackRate=2});
-  Array.from(document.getElementsByTagName("video")).forEach((e)=>{e.playbackRate=2});
-}

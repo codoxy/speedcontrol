@@ -1,10 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="button.css">
+    <style type="text/css">
+      button{
+        width: 80px;
+        padding: 5px;
+        background: #fafafa;
+        border: solid 1px #eaeaea;
+        margin: 1px;
+        border-radius: 3px;
+      }
+    </style>
   </head>
   <body>
-    <button id="changeColor"></button>
+    <p>Speed:</p>
+    <button data-playbackrate="1" id="x1">x 1.00</button>
+    <button data-playbackrate="1.25" id="x125">x 1.25</button>
+    <button data-playbackrate="1.5" id="x15">x 1.50</button>
+    <button data-playbackrate="1.75" id="x175">x 1.75</button>
+    <button data-playbackrate="2" id="x2">x 2.00</button>
     <script src="popup.js"></script>
   </body>
 </html>
